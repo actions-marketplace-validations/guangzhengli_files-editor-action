@@ -1,0 +1,35 @@
+name: 'Files Editor Action'
+description: 'schedule file editor'
+branding:
+  icon: 'file-text'  
+  color: 'yellow'
+inputs:
+  file_name:
+    description: "file name"
+    required: true
+  type:
+    description: "file editor type: sort, etc"
+    required: true
+runs:
+  using: 'composite'
+  steps:
+    - name: Install Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    # - name: Install Dependencies
+    #   run: pip install -r requirements.txt
+    #   shell: bash
+    - name: Pass Inputs to Shell
+      run: |
+          echo "INPUT_FILE_NAME=${{ inputs.file_name }}" >> $GITHUB_ENV
+          echo "INPUT_TYPE=${{ inputs.type }}" >> $GITHUB_ENV
+      shell: bash
+    - name: Files Editor
+      id: files-editor
+      run: python files_editor.py
+      shell: bash
+    - name: GitHub Repo Auto Commit
+      uses: stefanzweifel/git-auto-commit-action@v4
+      with:
+        commit_message: Automated Change
