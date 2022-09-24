@@ -1,6 +1,8 @@
 name: files editor action test
 
-on: push
+on:
+  schedule:
+    - cron:  '0 2 * * *'
 
 jobs:
   build:
